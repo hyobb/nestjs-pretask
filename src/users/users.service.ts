@@ -19,7 +19,10 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findByEmail(email);
+    const user = this.userRepository.findByEmail(email);
+    console.log(user);
+
+    return user;
   }
 
   async findAll(): Promise<User[]> {
