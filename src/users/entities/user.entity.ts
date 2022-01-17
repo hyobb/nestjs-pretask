@@ -13,6 +13,6 @@ export class User extends BaseEntity {
   @Column({ nullable: false })
   password: string;
 
-  @OneToMany(() => Post, post => post.user)
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 }

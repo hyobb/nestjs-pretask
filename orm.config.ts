@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const ormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -9,4 +10,5 @@ export const ormConfig: TypeOrmModuleOptions = {
   database: 'nest-pretask',
   synchronize: true,
   entities: ['dist/**/*.entity{.ts,.js}'],
+  namingStrategy: new SnakeNamingStrategy(),
 };
