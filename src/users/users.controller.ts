@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { ResponseUserDto } from './dtos/response-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -8,22 +9,21 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll(@Query('name') name) {
-    if (name) {
-      return this.usersService.findByName(name);
-    }
+  async findAll(@Query('name') name) {
+    const users: Array<User> = name
+      ? await this.usersService.findByName(name)
+      : await this.usersService.findAll();
 
-    return this.usersService.findAll();
+    return users.map((user) => new ResponseUserDto(user));
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: number) {
-    console.log(id);
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: number) {
+    return new ResponseUserDto(await this.usersService.findOne(id));
   }
 
   @Post()
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.create(userDto);
+  async create(@Body() userDto: CreateUserDto) {
+    return new ResponseUserDto(await this.usersService.create(userDto));
   }
 }

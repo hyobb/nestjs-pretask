@@ -9,7 +9,12 @@ import { Auth } from './auth';
 import { PostsModule } from './posts/posts.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), UsersModule, AuthModule, PostsModule],
+  imports: [
+    TypeOrmModule.forRoot(ormConfig),
+    UsersModule,
+    AuthModule,
+    PostsModule,
+  ],
   controllers: [AppController],
   providers: [AppService, Auth],
 })

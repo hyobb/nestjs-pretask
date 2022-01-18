@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../common/base.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, Exclusion, OneToMany } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User extends BaseEntity {
