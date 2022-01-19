@@ -17,7 +17,7 @@ export class UsersController {
     return users.map((user) => new ResponseUserDto(user));
   }
 
-  @Get('/:id')
+  @Get(':id')
   async findOne(@Param('id') id: number) {
     return new ResponseUserDto(await this.usersService.findOne(id));
   }

@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ResponsePostDto } from './dtos/response-post.dto';
@@ -13,19 +23,18 @@ export class PostsController {
   @Get()
   async findAll() {
     const posts = await this.postsService.findAll();
-    console.log(posts);
     return posts.map((post) => new ResponsePostDto(post));
   }
 
   @UseGuards(JwtAuthGaurd)
-  @Patch('/:id')
+  @Patch(':id')
   async patch(
-    @Param('id') postId: number,
+    @Param('id') id: number,
     @Req() req,
     @Body() postDto: UpdatePostDto,
   ) {
     const user = req.user;
-    const post = await this.postsService.update(postId, postDto, user);
+    const post = await this.postsService.update(id, postDto, user);
 
     return post;
   }
@@ -38,6 +47,10 @@ export class PostsController {
     return new ResponsePostDto(post);
   }
 
-  // @UseGuards(JwtAuthGaurd)
-
+  @UseGuards(JwtAuthGaurd)
+  @Delete(':id')
+  async delete(@Param('id') id: number, @Req() req) {
+    const user = req.user;
+    return this.postsService.delete(id, user);
+  }
 }
