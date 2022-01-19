@@ -19,15 +19,13 @@ export class PostsService {
     return ret;
   }
 
-  async update(postId, updatePostDto: UpdatePostDto, user: User) {
+  async update(id, updatePostDto: UpdatePostDto, user: User) {
     const post = await this.postRepository.findOne({
       where: {
-        postId,
+        id,
       },
       relations: ['user'],
     });
-    console.log(user);
-    console.log(post);
 
     if (post.user.id != user.id) {
       throw new ForbiddenException({
@@ -35,8 +33,9 @@ export class PostsService {
         message: [`수정 권한이 없습니다.`],
         error: 'Forbidden',
       });
-
-      return this.postRepository.update(postId, updatePostDto);
     }
+
+    await this.postRepository.update(id, updatePostDto);
+    return this.postRepository.findOneOrFail(id);
   }
 }

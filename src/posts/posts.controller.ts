@@ -25,7 +25,7 @@ export class PostsController {
     @Body() postDto: UpdatePostDto,
   ) {
     const user = req.user;
-    const post = this.postsService.update(postId, postDto, user);
+    const post = await this.postsService.update(postId, postDto, user);
 
     return post;
   }
@@ -36,6 +36,8 @@ export class PostsController {
     const user = req.user;
     const post = await this.postsService.create(postDto, user);
     return new ResponsePostDto(post);
-    // return new ResponsePostDto(await this.postsService.create(postDto, user));
   }
+
+  // @UseGuards(JwtAuthGaurd)
+
 }
