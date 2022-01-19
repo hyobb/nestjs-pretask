@@ -19,7 +19,6 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @UseGuards(JwtAuthGaurd)
   @Get()
   async findAll() {
     const posts = await this.postsService.findAll();
