@@ -20,7 +20,7 @@ export class PostsService {
     return ret;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto, user: User) {
+  async update(id: number, user: User, updatePostDto: UpdatePostDto) {
     const post = await this.postRepository.findOne({
       where: {
         id,

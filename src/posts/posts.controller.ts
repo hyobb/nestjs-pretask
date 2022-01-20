@@ -10,6 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
+import { GetUser } from 'src/common/get-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ResponsePostDto } from './dtos/response-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
@@ -29,27 +31,22 @@ export class PostsController {
   @Patch(':id')
   async patch(
     @Param('id') id: number,
-    @Req() req,
+    @GetUser() user: User,
     @Body() postDto: UpdatePostDto,
   ) {
-    const user = req.user;
-    const post = await this.postsService.update(id, postDto, user);
-
-    return post;
+    return new ResponsePostDto(await this.postsService.update(id, user, postDto));
   }
 
   @UseGuards(JwtAuthGaurd)
   @Post()
-  async create(@Req() req, @Body() postDto: CreatePostDto) {
-    const user = req.user;
-    const post = await this.postsService.create(postDto, user);
-    return new ResponsePostDto(post);
+  async create(@GetUser() user: User, @Body() postDto: CreatePostDto) {
+    return new ResponsePostDto(await this.postsService.create(postDto, user));
   }
+
 
   @UseGuards(JwtAuthGaurd)
   @Delete(':id')
-  async delete(@Param('id') id: number, @Req() req) {
-    const user = req.user;
+  async delete(@Param('id') id: number, @GetUser() user: User) {
     return this.postsService.delete(id, user);
   }
 }
