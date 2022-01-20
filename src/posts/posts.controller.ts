@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
-import { GetUser } from 'src/common/get-user.decorator';
+import { GetUser } from 'src/global/decorators/get-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ResponsePostDto } from './dtos/response-post.dto';

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
-import { GetUser } from 'src/common/get-user.decorator';
+import { GetUser } from 'src/global/decorators/get-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
