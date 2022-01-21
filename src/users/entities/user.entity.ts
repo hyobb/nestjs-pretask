@@ -1,4 +1,4 @@
-import { BaseEntity } from '../../global/entities/base.entity';
+import { BaseEntity } from '../../libs/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
 import { Comment } from 'src/comments/entities/comment.entity';

@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,7 +12,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.useLogger(app.get(Logger));
 
+  console.log(process.env.NODE_ENV);
   await app.listen(3000);
 }
 bootstrap();

@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { ResponseUserDto } from './dtos/response-user.dto';
 import { User } from './entities/user.entity';
@@ -14,16 +15,22 @@ export class UsersController {
       ? await this.usersService.findByName(name)
       : await this.usersService.findAll();
 
-    return users.map((user) => new ResponseUserDto(user));
+    return BaseResponseDto.OK_WITH(
+      users.map((user) => new ResponseUserDto(user)),
+    );
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return new ResponseUserDto(await this.usersService.findOne(id));
+    const user = await this.usersService.findOne(id);
+
+    return BaseResponseDto.OK_WITH(new ResponseUserDto(user));
   }
 
   @Post()
   async create(@Body() userDto: CreateUserDto) {
-    return new ResponseUserDto(await this.usersService.create(userDto));
+    const user = await this.usersService.create(userDto);
+
+    return BaseResponseDto.OK_WITH(new ResponseUserDto(user));
   }
 }

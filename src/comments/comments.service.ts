@@ -1,21 +1,13 @@
 import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { Comment } from './entities/comment.entity';
 import { CommentRepository } from './comments.repository';
-import { PostRepository } from 'src/posts/post.repository';
-import { UserRepository } from 'src/users/user.repository';
 import { CreateCommentDto } from './dtos/create-comment.dto';
-import { Post } from 'src/posts/entities/post.entity';
-import { User } from 'src/users/entities/user.entity';
 import { updateCommentDto } from './dtos/update-comment.dto';
 import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class CommentsService {
-  constructor(
-    private readonly commentRepository: CommentRepository,
-    private readonly postRepository: PostRepository,
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly commentRepository: CommentRepository) {}
 
   async findAll(postId: number): Promise<Comment[]> {
     return this.commentRepository.find({ postId: postId});

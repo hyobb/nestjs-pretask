@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
-import { LoginUserDto } from 'src/users/dtos/login-user.dto';
+import { GetUser } from 'src/libs/decorators/get-user.decorator';
+import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
+import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { JwtAuthGaurd } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -10,13 +12,15 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req) {
-    return this.authService.login(req.user);
+  async login(@GetUser() user: User) {
+    this.authService.login(user);
+
+    return BaseResponseDto.OK('성공적으로 로그인 되었습니다.');
   }
 
   @UseGuards(JwtAuthGaurd)
   @Get('profile')
-  getProfile(@Req() req) {
-    return req.user;
+  getProfile(@GetUser() user: User) {
+    return BaseResponseDto.OK_WITH(user);
   }
 }

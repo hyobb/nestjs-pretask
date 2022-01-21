@@ -6,11 +6,11 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
-import { GetUser } from 'src/global/decorators/get-user.decorator';
+import { GetUser } from 'src/libs/decorators/get-user.decorator';
+import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
 import { User } from 'src/users/entities/user.entity';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ResponsePostDto } from './dtos/response-post.dto';
@@ -24,7 +24,10 @@ export class PostsController {
   @Get()
   async findAll() {
     const posts = await this.postsService.findAll();
-    return posts.map((post) => new ResponsePostDto(post));
+
+    return BaseResponseDto.OK_WITH(
+      posts.map((post) => new ResponsePostDto(post)),
+    );
   }
 
   @UseGuards(JwtAuthGaurd)
@@ -34,19 +37,24 @@ export class PostsController {
     @GetUser() user: User,
     @Body() postDto: UpdatePostDto,
   ) {
-    return new ResponsePostDto(await this.postsService.update(id, user, postDto));
+    const post = await this.postsService.update(id, user, postDto);
+
+    return BaseResponseDto.OK_WITH(new ResponsePostDto(post));
   }
 
   @UseGuards(JwtAuthGaurd)
   @Post()
   async create(@GetUser() user: User, @Body() postDto: CreatePostDto) {
-    return new ResponsePostDto(await this.postsService.create(postDto, user));
-  }
+    const post = await this.postsService.create(postDto, user);
 
+    return BaseResponseDto.OK_WITH(new ResponsePostDto(post));
+  }
 
   @UseGuards(JwtAuthGaurd)
   @Delete(':id')
   async delete(@Param('id') id: number, @GetUser() user: User) {
-    return this.postsService.delete(id, user);
+    this.postsService.delete(id, user);
+
+    return BaseResponseDto.OK('삭제되었습니다.');
   }
 }

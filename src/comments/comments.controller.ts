@@ -1,6 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
-import { GetUser } from 'src/global/decorators/get-user.decorator';
+import { GetUser } from 'src/libs/decorators/get-user.decorator';
+import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
 import { User } from 'src/users/entities/user.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
@@ -14,12 +25,17 @@ export class CommentsController {
   @Get()
   async findAll(@Param('postId') postId: number) {
     const comments = await this.commentsService.findAll(postId);
-    return comments.map((comment) => new ResponseCommentDto(comment));
+
+    return BaseResponseDto.OK_WITH(
+      comments.map((comment) => new ResponseCommentDto(comment)),
+    );
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return new ResponseCommentDto(await this.commentsService.findOne(id));
+    const comment = await this.commentsService.findOne(id);
+
+    return BaseResponseDto.OK_WITH(new ResponseCommentDto(comment));
   }
 
   @UseGuards(JwtAuthGaurd)
@@ -35,7 +51,7 @@ export class CommentsController {
       user.id,
     );
 
-    return new ResponseCommentDto(comment);
+    return BaseResponseDto.OK_WITH(new ResponseCommentDto(comment));
   }
 
   @UseGuards(JwtAuthGaurd)
@@ -45,12 +61,16 @@ export class CommentsController {
     @GetUser() user: User,
     @Body() commentDto: updateCommentDto,
   ) {
-    return new ResponseCommentDto(await this.commentsService.update(id, user.id, commentDto));
+    const comment = await this.commentsService.update(id, user.id, commentDto);
+
+    return BaseResponseDto.OK_WITH(new ResponseCommentDto(comment));
   }
 
   @UseGuards(JwtAuthGaurd)
   @Delete(':id')
   async delete(@Param('id') id: number, @GetUser() user: User) {
-    return this.commentsService.delete(id, user.id);
+    this.commentsService.delete(id, user.id);
+
+    return BaseResponseDto.OK('삭제되었습니다.');
   }
 }
