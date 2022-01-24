@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
+import { BaseResponseDto } from '../libs/dtos/base-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { ResponseUserDto } from './dtos/response-user.dto';
 import { User } from './entities/user.entity';

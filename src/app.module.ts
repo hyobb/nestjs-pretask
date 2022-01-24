@@ -10,6 +10,7 @@ import { PostsModule } from './posts/posts.module';
 import { CommentModule } from './comments/comments.module';
 import { LoggerModule } from 'nestjs-pino';
 import { pinoLoggerConfig } from './libs/configs/pino-logger.config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,8 +20,9 @@ import { pinoLoggerConfig } from './libs/configs/pino-logger.config';
     AuthModule,
     PostsModule,
     CommentModule,
+    JwtModule
   ],
   controllers: [AppController],
-  providers: [AppService, Auth],
+  providers: [AppService, Auth, JwtService],
 })
 export class AppModule {}

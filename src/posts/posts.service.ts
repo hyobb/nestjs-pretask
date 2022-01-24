@@ -1,5 +1,5 @@
-import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
+import { ForbiddenException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from '../users/entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
@@ -15,6 +15,14 @@ export class PostsService {
   }
 
   async create(postDto: CreatePostDto, user: User) {
+    if (user == undefined) {
+      throw new UnauthorizedException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: [`로그인 후 게시글 작성이 가능합니다.`],
+        error: 'UnAuthorized'
+      });
+    }
+
     const post = { ...postDto, user: user };
     const ret: Post = await this.postRepository.save(post);
     return ret;

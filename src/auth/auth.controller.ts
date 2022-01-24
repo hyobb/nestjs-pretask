@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
-import { GetUser } from 'src/libs/decorators/get-user.decorator';
-import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
-import { User } from 'src/users/entities/user.entity';
+import { GetUser } from '../libs/decorators/get-user.decorator';
+import { BaseResponseDto } from '../libs/dtos/base-response.dto';
+import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { JwtAuthGaurd } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';

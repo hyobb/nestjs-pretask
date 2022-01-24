@@ -9,10 +9,10 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGaurd } from 'src/auth/guards/jwt-auth.guard';
-import { GetUser } from 'src/libs/decorators/get-user.decorator';
-import { BaseResponseDto } from 'src/libs/dtos/base-response.dto';
-import { User } from 'src/users/entities/user.entity';
+import { JwtAuthGaurd } from '../auth/guards/jwt-auth.guard';
+import { GetUser } from '../libs/decorators/get-user.decorator';
+import { BaseResponseDto } from '../libs/dtos/base-response.dto';
+import { User } from '../users/entities/user.entity';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { ResponseCommentDto } from './dtos/response-comment.dto';

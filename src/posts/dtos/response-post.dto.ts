@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Post } from '../entities/post.entity';
 
 export class ResponsePostDto {
