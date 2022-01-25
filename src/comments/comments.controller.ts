@@ -51,7 +51,7 @@ export class CommentsController {
       user.id,
     );
 
-    return BaseResponseDto.OK_WITH(new ResponseCommentDto(comment));
+    return BaseResponseDto.CREATED_WITH(new ResponseCommentDto(comment));
   }
 
   @UseGuards(JwtAuthGaurd)

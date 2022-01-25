@@ -20,6 +20,10 @@ export class BaseResponseDto<T> {
     return new BaseResponseDto<T>(HttpStatus.OK, message, data);
   }
 
+  static CREATED_WITH<T>(data: T, message = ''): BaseResponseDto<T> {
+    return new BaseResponseDto<T>(HttpStatus.CREATED, message, data);
+  }
+
   @Expose()
   get statusCode(): number {
     return this._statusCode;

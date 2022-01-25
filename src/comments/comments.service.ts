@@ -4,13 +4,17 @@ import { CommentRepository } from './comments.repository';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { updateCommentDto } from './dtos/update-comment.dto';
 import { DeleteResult } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly commentRepository: CommentRepository) {}
+  constructor(
+    @InjectRepository(Comment)
+    private readonly commentRepository: CommentRepository,
+  ) {}
 
   async findAll(postId: number): Promise<Comment[]> {
-    return this.commentRepository.find({ postId: postId});
+    return this.commentRepository.find({ postId: postId });
   }
 
   async findOne(id: number): Promise<Comment> {

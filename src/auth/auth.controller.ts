@@ -13,6 +13,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@GetUser() user: User) {
+    console.log(1213123);
     this.authService.login(user);
 
     return BaseResponseDto.OK('성공적으로 로그인 되었습니다.');

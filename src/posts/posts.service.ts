@@ -1,14 +1,23 @@
-import { ForbiddenException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Post } from './entities/post.entity';
 import { PostRepository } from './post.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    @InjectRepository(Post)
+    private readonly postRepository: PostRepository,
+  ) {}
 
   async findAll(): Promise<Post[]> {
     return this.postRepository.find({ relations: ['user'] });
@@ -19,7 +28,7 @@ export class PostsService {
       throw new UnauthorizedException({
         statusCode: HttpStatus.UNAUTHORIZED,
         message: [`로그인 후 게시글 작성이 가능합니다.`],
-        error: 'UnAuthorized'
+        error: 'UnAuthorized',
       });
     }
 

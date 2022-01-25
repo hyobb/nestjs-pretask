@@ -47,7 +47,7 @@ export class PostsController {
   async create(@GetUser() user: User, @Body() postDto: CreatePostDto) {
     const post = await this.postsService.create(postDto, user);
 
-    return BaseResponseDto.OK_WITH(new ResponsePostDto(post));
+    return BaseResponseDto.CREATED_WITH(new ResponsePostDto(post));
   }
 
   @UseGuards(JwtAuthGaurd)

@@ -2,6 +2,7 @@ import { BaseEntity } from '../../libs/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import * as faker from '@faker-js/faker';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -19,4 +20,21 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
+
+  static factory({
+    params = {
+      id: faker.datatype.number(),
+      name: faker.name.findName(),
+      email: faker.internet.email(),
+      password: 'password',
+    },
+  }: {
+    params?: Partial<User>;
+  } = {}): User {
+    const user = new User();
+
+    Object.assign(user, params);
+
+    return user;
+  }
 }

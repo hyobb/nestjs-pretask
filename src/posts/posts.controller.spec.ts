@@ -1,22 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostRepository } from './post.repository';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { mockRepositoryConfig } from '../libs/mocks/repository.config';
+import { MockRepository } from '../libs/mocks/repository.type';
+import { Post } from './entities/post.entity';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
+
+const mockPostRepository = mockRepositoryConfig;
 
 describe('PostsController', () => {
   let controller: PostsController;
   let service: PostsService;
-  let repository: PostRepository;
+  let postRepository: MockRepository<Post>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PostsController],
-      providers: [PostsService, PostRepository],
+      providers: [
+        PostsService,
+        {
+          provide: getRepositoryToken(Post),
+          useValue: mockPostRepository(),
+        },
+      ],
     }).compile();
 
     controller = module.get<PostsController>(PostsController);
     service = module.get<PostsService>(PostsService);
-    repository = module.get<PostRepository>(PostRepository);
+    postRepository = module.get<MockRepository<Post>>(getRepositoryToken(Post));
   });
 
   it('should be defined', () => {
