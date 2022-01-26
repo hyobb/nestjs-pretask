@@ -3,7 +3,6 @@ import { Comment } from '../../comments/entities/comment.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../libs/entities/base.entity';
 import * as faker from '@faker-js/faker';
-import { ForbiddenException } from '@nestjs/common';
 
 @Entity('posts')
 export class Post extends BaseEntity {
@@ -25,12 +24,11 @@ export class Post extends BaseEntity {
       title: faker.lorem.sentence(),
       content: faker.lorem.paragraph(),
     },
-    withUser = false,
+    user = User.factory(),
   }: {
     params?: Partial<Post>;
-    withUser?: boolean;
+    user?: User;
   } = {}): Post {
-    const user = withUser ? User.factory() : undefined;
     const post = new Post();
 
     Object.assign(post, { ...params, user: user });

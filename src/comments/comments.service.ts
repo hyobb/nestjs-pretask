@@ -18,7 +18,7 @@ export class CommentsService {
   }
 
   async findOne(id: number): Promise<Comment> {
-    return this.commentRepository.findOne(id);
+    return this.commentRepository.findOneOrFail(id);
   }
 
   async create(commentDto: CreateCommentDto, postId: number, userId: number) {
@@ -27,7 +27,7 @@ export class CommentsService {
   }
 
   async update(id: number, userId: number, updateCommentDto: updateCommentDto) {
-    const comment = await this.commentRepository.findOne({
+    const comment = await this.commentRepository.findOneOrFail({
       where: {
         id,
       },
@@ -47,7 +47,7 @@ export class CommentsService {
   }
 
   async delete(id: number, userId: number): Promise<DeleteResult> {
-    const comment = await this.commentRepository.findOne({
+    const comment = await this.commentRepository.findOneOrFail({
       where: {
         id,
       },

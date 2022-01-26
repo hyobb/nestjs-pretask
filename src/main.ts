@@ -1,10 +1,12 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
+import { EntityNotFoundFilter } from './libs/filters/entity-notfound-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalPipes(
     new ValidationPipe({
@@ -12,9 +14,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.useGlobalFilters(new EntityNotFoundFilter(httpAdapter));
   app.useLogger(app.get(Logger));
 
-  console.log(process.env.NODE_ENV);
   await app.listen(3000);
 }
 bootstrap();

@@ -10,7 +10,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async findByEmail(email: string) {
-    const user = await this.findOne({ email: email });
+    const user = await this.findOneOrFail({ email: email });
 
     return user;
   }

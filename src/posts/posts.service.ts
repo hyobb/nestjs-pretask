@@ -1,9 +1,4 @@
-import {
-  ForbiddenException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { CreatePostDto } from './dtos/create-post.dto';
@@ -11,6 +6,7 @@ import { UpdatePostDto } from './dtos/update-post.dto';
 import { Post } from './entities/post.entity';
 import { PostRepository } from './post.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomForbiddenException } from '../libs/exceptions/custom-forbidden.exception';
 
 @Injectable()
 export class PostsService {
@@ -38,7 +34,7 @@ export class PostsService {
   }
 
   async update(id: number, user: User, updatePostDto: UpdatePostDto) {
-    const post = await this.postRepository.findOne({
+    const post = await this.postRepository.findOneOrFail({
       where: {
         id,
       },
@@ -46,19 +42,15 @@ export class PostsService {
     });
 
     if (post.user.id != user.id) {
-      throw new ForbiddenException({
-        statusCode: HttpStatus.FORBIDDEN,
-        message: [`수정 권한이 없습니다.`],
-        error: 'Forbidden',
-      });
+      throw new CustomForbiddenException();
     }
 
     await this.postRepository.update(id, updatePostDto);
-    return this.postRepository.findOneOrFail(id);
+    return this.postRepository.findOne(id);
   }
 
   async delete(id: number, user: User): Promise<DeleteResult> {
-    const post = await this.postRepository.findOne({
+    const post = await this.postRepository.findOneOrFail({
       where: {
         id,
       },
@@ -66,11 +58,7 @@ export class PostsService {
     });
 
     if (post.user.id != user.id) {
-      throw new ForbiddenException({
-        statusCode: HttpStatus.FORBIDDEN,
-        message: [`수정 권한이 없습니다.`],
-        error: 'Forbidden',
-      });
+      throw new CustomForbiddenException();
     }
 
     return this.postRepository.delete(id);
