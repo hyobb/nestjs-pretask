@@ -49,7 +49,7 @@ export class PostsService {
     return this.postRepository.findOne(id);
   }
 
-  async delete(id: number, user: User): Promise<DeleteResult> {
+  async delete(id: number, user: User) {
     const post = await this.postRepository.findOneOrFail({
       where: {
         id,

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { jwtConstants } from 'src/libs/constants/jwtConstants';
+import { jwtConfig } from 'src/libs/configs/jwt.config';
 import { UserRepository } from 'src/users/user.repository';
 import { User } from '../users/entities/user.entity';
 import { UsersModule } from '../users/users.module';
@@ -16,7 +16,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: jwtConfig.secret,
       signOptions: { expiresIn: '120s' },
     }),
   ],

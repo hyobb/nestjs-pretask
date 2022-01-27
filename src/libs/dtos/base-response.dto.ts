@@ -6,14 +6,14 @@ export class BaseResponseDto<T> {
   @Exclude() private readonly _message: string;
   @Exclude() private readonly _data: T;
 
-  private constructor(status: HttpStatus, message: string, data: T) {
+  private constructor(status: HttpStatus, message: string, data?: T) {
     this._statusCode = status;
     this._message = message;
     this._data = data;
   }
 
   static OK(message = ''): BaseResponseDto<string> {
-    return new BaseResponseDto<string>(HttpStatus.OK, message, '');
+    return new BaseResponseDto<string>(HttpStatus.OK, message);
   }
 
   static OK_WITH<T>(data: T, message = ''): BaseResponseDto<T> {

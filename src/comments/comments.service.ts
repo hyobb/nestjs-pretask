@@ -5,6 +5,7 @@ import { CreateCommentDto } from './dtos/create-comment.dto';
 import { updateCommentDto } from './dtos/update-comment.dto';
 import { DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomForbiddenException } from '../libs/exceptions/custom-forbidden.exception';
 
 @Injectable()
 export class CommentsService {
@@ -35,11 +36,7 @@ export class CommentsService {
     });
 
     if (comment.user.id != userId) {
-      throw new ForbiddenException({
-        statusCode: HttpStatus.FORBIDDEN,
-        message: [`수정 권한이 없습니다.`],
-        error: 'Forbidden',
-      });
+      throw new CustomForbiddenException();
     }
 
     await this.commentRepository.update(id, updateCommentDto);
@@ -55,11 +52,7 @@ export class CommentsService {
     });
 
     if (comment.user.id != userId) {
-      throw new ForbiddenException({
-        statusCode: HttpStatus.FORBIDDEN,
-        message: [`수정 권한이 없습니다.`],
-        error: 'Forbidden',
-      });
+      throw new CustomForbiddenException();
     }
 
     return this.commentRepository.delete(id);
